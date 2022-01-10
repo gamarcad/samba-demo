@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: DockerfileAPI
+    ports:
+      - "8000:80"
+    volumes:
+      - ./samba-api:/app/
+      - ./data/data:/data
+    command: uvicorn app.main:app --reload --host 0.0.0.0 --port 80
+
+  app:
+    depends_on:
+      - 'api'
+    build:
+      context: .
+      dockerfile: ./DockerfileApp
+    ports:
+      - "80:4200"
+    volumes:
+      - './samba-app/src:/app/src/'
+    command: ng serve --host 0.0.0.0 --port 4200 --disableHostCheck true 

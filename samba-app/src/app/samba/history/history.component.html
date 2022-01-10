@@ -1,0 +1,23 @@
+<div class="popup-header">
+  <h2 class="title">History</h2>
+  <button id="close-button" (click)="close()">Close</button>
+</div>
+<div class="popup-content">
+  <table>
+    <tr class="header">
+      <th scope="col">Algorithm</th>
+      <th scope="col">Parameters</th>
+      <th scope="col">Budget</th>
+      <th scope="col">Secure Exec. Time (s)</th>
+      <th scope="col">Cumulative Rewards</th>
+    </tr>
+    <tr *ngFor="let history of histories; let i = index" [class.even]="i % 2 == 0" [class.odd]="i % 2 == 1">
+      <td>{{getFormattedAlgorithName(history.algorithm)}}</td>
+      <td><span *ngFor="let param of history.params">{{param.name}}: {{param.value}}</span></td>
+      <td class="right">{{history.budget}}</td>
+      <td class="right">{{getExecutionTime(history)}}</td>
+      <td class="right">{{history.turns[history.turns.length - 1].cumulative_reward}}</td>
+    </tr>
+  </table>
+</div>
+

@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Samba</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&display=swap" rel="stylesheet">
+</head>
+<body >
+  <div class="content" id="panels-container"
+       (window:keydown.control.shift)="switchHighlight($event)"
+       (window:keydown.control.tab)="initializeForPresentation($event)">
+
+    <!-- Left Panel -->
+    <div id="left-panel" class="panel" [class.highlightMode]="highlightStatus">
+      <div class="fields">
+        <div class="card" id="samba-configs">
+          <div class="card-title">SAMBA</div>
+          <div class="card-content">
+
+            <!-- Algo -->
+            <div id="algo-selection" class="field">
+              <label for="algo-selection-input">Algorithm</label>
+              <select id="algo-selection-input" [(ngModel)]="selectedAlgorithm" (change)="changeExecution()">
+                <option *ngFor="let algo of ALGORITHMS_SET" value="{{algo.id}}">{{algo.name}}</option>
+              </select>
+            </div>
+
+            <!-- Nb Arms -->
+            <div class="field">
+              <label for="nb-arms-input">K (# of data owners)</label>
+              <select id="nb-arms-input" [(ngModel)]="selectedK" (change)="changeExecution()">
+                <option *ngFor="let k of NB_ARMS_SET" [selected]="k == 4" value="{{k}}" >{{k}}</option>
+              </select>
+            </div>
+
+            <!-- Budget -->
+            <div id="budget" class="field">
+              <label for="budget-input">N (Budget)</label>
+              <select id="budget-input" [(ngModel)]="selectedBudget" (change)="changeExecution()">
+                <option *ngFor="let budget of BUDGETS_SET" value="{{budget}}">{{budget}}</option>
+              </select>
+            </div>
+
+            <!-- Dataset -->
+            <div class="field">
+              <label for="dataset-input">Dataset</label>
+              <select id="dataset-input" [(ngModel)]="selectedDataset" (change)="changeExecution()">
+                <option *ngFor="let dataset of DATASETS_SET" value="{{dataset.id}}">{{dataset.name}}</option>
+              </select>
+            </div>
+
+            <!-- Treshold -->
+            <div class="field">
+              <label for="threshold-input">Threshold</label>
+              <select id="threshold-input" [(ngModel)]="selectedThreshold" (change)="changeExecution()">
+                <option *ngFor="let thresold of TRESHOLD_SET" value="{{thresold}}">{{thresold}}</option>
+              </select>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Security</div>
+          <div class="card-container">
+            <div id="security" class="field">
+              <div class="fields-group">
+                <div class="field">
+                  <label for="aes">AES</label>
+                  <div class="cb" id="aes" [class.on]="aes" [class.off]="!aes" (click)="switchSecurity('aes')"></div>
+                </div>
+                <div class="field">
+                  <label for="permutation">Random Permutation</label>
+                  <div class="cb" id="permutation" [class.on]="permutation" [class.off]="!permutation" (click)="switchSecurity('permutation')"></div>
+                </div>
+                <div class="field">
+                  <label for="mask">Multiplicative Mask</label>
+                  <div class="cb" id="mask" [class.on]="mask" [class.off]="!mask" (click)="switchSecurity('mask')"></div>
+                </div>
+                <div class="field" id="paillier-field">
+                  <label for="paillier">Paillier</label>
+                  <div class="cb" id="paillier" [class.on]="paillier" [class.off]="!paillier" (click)="switchSecurity('paillier')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card">
+          <div class="card-title">Actions</div>
+          <div class="card-content" style="margin-bottom: 5px">
+            <div class="actions">
+              <div class="action">
+                <button (click)="previousState()" [class.disabled]="isPlaying">Previous</button>
+                <button (click)="switchPlaying()">
+                  <span *ngIf="!isPlaying">Play</span>
+                  <span *ngIf="isPlaying">Pause</span>
+                </button>
+                <button (click)="nextState()" [class.disabled]="isPlaying">Next</button>
+
+              </div>
+            </div>
+            <div class="actions">
+              <div class="action">
+                <button (click)="reset()" [class.disabled]="isPlaying">Reset</button>
+                <button (click)="moveToCumulativeRewardChapter()" [class.disabled]="isPlaying">End</button>
+              </div>
+            </div>
+
+            <!-- Pull input -->
+            <label for="turn">
+              Go Pull
+              <span *ngIf="execution && execution.turnIndex">(Current {{execution.turnIndex}})</span>
+            </label>
+            <input id="turn" type="text" (keydown.enter)="selectTurnByUser()" *ngIf="execution && execution.turnIndex" [(ngModel)]="selectedTurnField">
+          </div>
+        </div>
+
+        <!-- Message -->
+        <div id="message" class="card">
+          <div class="card-title">Message</div>
+          <div class="card-content">
+            <app-action-text [execution]="execution"></app-action-text>
+          </div>
+        </div>
+
+        <!-- Resources -->
+        <div id="resources" class="card">
+          <div class="card-title">Links</div>
+          <div class="card-content">
+            <ul>
+              <li>
+                Access to the <a href="https://gitlab.limos.fr/gamarcad/samba-demo">git</a> to inspect the code.
+                Feel free to clone and modify it as you want.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <!-- Center Panels -->
+    <div id="center-panel" class="panel" >
+
+      <!-- Architecture Panel -->
+      <div id="architecture-panel" class="panel" >
+        <div class="architecture-container" [class.highlightMode]="highlightStatus">
+          <!-- Network Architecture -->
+          <app-architecture-plot [execution]="execution" [securityOption]="securityOption" [onNodeClick]="updateFocusedNode"></app-architecture-plot>
+
+          <!-- Network Data -->
+          <div class="data" *ngIf="execution">
+            <div id="nodes">
+              <div class="node" *ngFor="let node of execution.nodes">
+                <span class="reward">{{node.reward}}</span>
+                <span >/</span>
+                <span class="pull">{{node.pulls}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Code -->
+        <div id="code" *ngIf="execution" [class.highlightMode]="highlightStatus">
+
+          <!-- DOi -->
+          <div class="card node-card">
+            <div class="card-title">Data Owner (DO) i</div>
+            <div class="card-content">
+              <div [class.highlight]="execution.chapter == SambaChapter.INITIAL_EXPLORATION">
+                <p>reward = Pull(i)</p>
+                <p>s_i, n_i = reward, 1</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_2">
+                <p>for timeStep in Range( N ):</p>
+                <p *ngIf="this.selectedAlgorithm == Algorithm.THOMPSON_SAMPLING">&nbsp;&nbsp;&nbsp;&nbsp;score = Beta( s_i + 1, n_i - s_i + 1 )</p>
+                <p *ngIf="this.selectedAlgorithm == Algorithm.UCB">&nbsp;&nbsp;&nbsp;&nbsp;score = s_i / n_i + sqrt(2*ln(timeStep)/n_i)</p>
+                <p *ngIf="this.selectedAlgorithm == Algorithm.SOFTMAX">
+                  &nbsp;&nbsp;&nbsp;&nbsp;score = exp((s_i / n_i) / tau)
+                </p>
+                <p *ngIf="this.selectedAlgorithm == Algorithm.EPSILON_GREEDY || this.selectedAlgorithm == Algorithm.EPSILON_DECREASING_GREEDY">
+                  &nbsp;&nbsp;&nbsp;&nbsp;score = s_i / n_i
+                </p>
+
+                <div *ngIf="mask">
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;mask = Random()</p>
+                  <p *ngIf="aes">&nbsp;&nbsp;&nbsp;&nbsp;Send( AESEnc(score * mask, Key), Controller )</p>
+                  <p *ngIf="!aes">&nbsp;&nbsp;&nbsp;&nbsp;Send( score * mask, Controller )</p>
+                </div>
+                <div *ngIf="!mask">
+                  <p *ngIf="aes">&nbsp;&nbsp;&nbsp;&nbsp;Send( AESEnc(score, Key), Controller )</p>
+                  <p *ngIf="!aes">&nbsp;&nbsp;&nbsp;&nbsp;Send( score, Controller )</p>
+                </div>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_5">
+                <p *ngIf="aes">&nbsp;&nbsp;&nbsp;&nbsp;b_i = AESDec( receive( Controller ), Key )</p>
+                <p *ngIf="!aes">&nbsp;&nbsp;&nbsp;&nbsp;b_i = Receive( Controller )</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;if b_i == 1:</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reward = pull( i )</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;s_i = s_i + reward</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n_i = n_i + 1</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CUMULATIVE_REWARD_COMPUTATION && execution.state == SambaState.STEP_6">
+                <p *ngIf="paillier">Send( PaillierEnc( s_i, PublicKey ), Controller )</p>
+                <p *ngIf="!paillier">Send( s_i, Controller )</p>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Controller -->
+          <div class="card controller-card" >
+            <div class="card-title">Controller</div>
+            <div class="card-content">
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_2">
+                <p>for timeStep in Range(N):</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;scores = []</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;for DOi in Range(K):</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;score = Receive( DOi )</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scores.append( score )</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_3">
+                <div *ngIf="permutation">
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;permutedScores = Permute(scores)</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;Send( permutedScores, Comp )</p>
+                </div>
+                <p *ngIf="!permutation">&nbsp;&nbsp;&nbsp;&nbsp;Send( scores, Comp )</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_4">
+                <p *ngIf="permutation">&nbsp;&nbsp;&nbsp;&nbsp;permutedSelectionBits = Receive( Comp )</p>
+                <p *ngIf="!permutation">&nbsp;&nbsp;&nbsp;&nbsp;selectionBits = Receive( Comp )</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_5">
+                <div *ngIf="permutation">
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;selectionBits = Invert( permutedSelectionBits )</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;for DOi in Range(K):</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send( selectionBits[DOi], DOi )</p>
+                </div>
+                <div *ngIf="!permutation">
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;for DOi in Range(K):</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Send( selectionBits[DOi], DOi )</p>
+                </div>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CUMULATIVE_REWARD_COMPUTATION && execution.state == SambaState.STEP_6">
+                <p>cumulReward = Receive( DO0 )</p>
+                <p>for DOi in Range(1, K):</p>
+                <p *ngIf="paillier">&nbsp;&nbsp;&nbsp;&nbsp;cumulReward = PaillierAdd( cumulReward, Receive( DOi ) )</p>
+                <p *ngIf="!paillier">&nbsp;&nbsp;&nbsp;&nbsp;cumulReward += Receive( DOi )</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CUMULATIVE_REWARD_COMPUTATION && execution.state == SambaState.STEP_7">
+                <p>Send( cumulReward, Customer )</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comp -->
+          <div class="card comp-card" >
+            <div class="card-title">Comp</div>
+            <div class="card-content">
+              <p>for timeStep in Range( N ):</p>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_3">
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;scores = Receive( Comp )</p>
+              </div>
+              <div [class.highlight]="execution.chapter == SambaChapter.CORE_OF_PROTO && execution.state == SambaState.STEP_4">
+                <p *ngIf="aes">&nbsp;&nbsp;&nbsp;&nbsp;scores = [ Decrypt( score, Key ) for score in scores ]</p>
+
+                <!-- ArmSelect -->
+                <p *ngIf="this.selectedAlgorithm == Algorithm.UCB || this.selectedAlgorithm == Algorithm.THOMPSON_SAMPLING">&nbsp;&nbsp;&nbsp;&nbsp;selectedArm = Argmax( scores )</p>
+                <div *ngIf="this.selectedAlgorithm == Algorithm.EPSILON_GREEDY || this.selectedAlgorithm == Algorithm.EPSILON_DECREASING_GREEDY">
+                  <p *ngIf="this.selectedAlgorithm == Algorithm.EPSILON_DECREASING_GREEDY">
+                    &nbsp;&nbsp;&nbsp;&nbsp;if random() <= 1 / ln( timeStep, 2 )
+                  </p>
+                  <p *ngIf="this.selectedAlgorithm == Algorithm.EPSILON_GREEDY">
+                    &nbsp;&nbsp;&nbsp;&nbsp;if random() <= epsilon
+                  </p>
+                  <p> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; selectedArm = RandInt( 0, K - 1 )</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;else</p>
+                  <p> &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; selectedArm = Argmax( scores )</p>
+                </div>
+
+                <div *ngIf="this.selectedAlgorithm == Algorithm.SOFTMAX">
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;s = sum( scores )</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;weights = [score / s for score in scores]</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;selectedArm = WeightedRandom( Range( K ), weights )</p>
+                </div>
+
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;selectionBits = []</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;for DOi in Range( K ):</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bit = 1 if node == selectedArm else 0</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;selectionBits.append(bit)</p>
+                <p *ngIf="aes">&nbsp;&nbsp;&nbsp;&nbsp;selectionBits = [ AESEnc( bit, Key ) for bit in selectionBits ]</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;Send( selectionBits, Controller )</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer -->
+          <div class="card customer-card" >
+            <div class="card-title">Data Customer (DC)</div>
+            <div class="card-content">
+              <div [class.highlight]="execution.chapter == SambaChapter.CUMULATIVE_REWARD_COMPUTATION && execution.state == SambaState.STEP_7">
+                <p>cumulReward = Receive( Controller )</p>
+                <p *ngIf="paillier">cumulReward = PaillierDecrypt( cumulReward, SecretKey )</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages and Stats Panels -->
+      <div id="messages-stats-panels" class="panel">
+        <!-- Messages Panel -->
+        <div id="messages-panel" class="panel" [class.highlightMode]="highlightStatus">
+          <app-communications-plot
+            [securityOptions]="securityOption"
+            [execution]="execution"></app-communications-plot>
+        </div>
+
+        <!-- Stats Panel -->
+        <div id="stats-panel" class="panel" [class.highlightMode]="highlightStatus">
+          <app-execution-time-components-plot
+            [execution]="execution"
+            [securityOption]="securityOption"></app-execution-time-components-plot>
+
+          <app-execution-time-plot
+            [execution]="execution"
+            [securityOption]="securityOption"></app-execution-time-plot>
+
+
+          <!-- History Button -->
+          <div id="history">
+            <button (click)="showHistory()" [class.disabled]="isPlaying">History</button>
+          </div>
+
+          <!-- Actions -->
+          <div id="actions">
+            <button (click)="previousState()" [class.disabled]="isPlaying">Previous</button>
+            <button (click)="switchPlaying()">
+              <span *ngIf="!isPlaying">Play</span>
+              <span *ngIf="isPlaying">Pause</span>
+            </button>
+            <button (click)="nextState()" [class.disabled]="isPlaying">Next</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- History -->
+  <div id="history-container" *ngIf="showHistoryPopup" [class.hidden]="!showHistoryPopup">
+    <div id="history-popup">
+      <app-history (closeEvent)="hideHistory()"></app-history>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+#graph {
+  height: 75px;
+  width: 100%;
+}
+
+.plot-container {
+  position: relative;
+  border-radius: 3px;
+  padding: 5px;
+  width: 100%;
+  &.highlight {
+    background-color: rgba(218, 218, 218, 0.43);
+  }
+}
+
+@import '../../../colors';
+
+#message {
+  position: absolute;
+  top:  -5px;
+  text-align: center;
+  width: 98%;
+  font-size: $commSize;
+  text-space: 1px;
+  letter-spacing: .1px;
+  border: 1px solid transparent;
+
+  .aes {
+    color: $aesPrimary;
+  }
+
+  .mask {
+    color: $maskPrimary;
+  }
+
+  .paillier {
+    color: $paillierPrimary;
+  }
+
+  .permutation {
+    text-decoration: underline;
+    text-decoration-color: $permutationPrimary;
+    font-style: italic;
+  }
+}

@@ -1,0 +1,11 @@
+<div class="plot-container"
+     *ngIf="execution && communication "
+     [class.highlight]="execution.chapter == communication?.chapter && execution.state == communication?.state" >
+  <p id="message">
+    <span *ngFor="let token of message.tokens" [class.aes]="token.aes" [class.mask]="token.mask" [class.paillier]="token.paillier" [class.permutation]="token.permutation">
+      {{token.message}}
+    </span>
+  </p>
+  <div echarts id="graph" [options]="options" [merge]="updateOptions"></div>
+</div>
+

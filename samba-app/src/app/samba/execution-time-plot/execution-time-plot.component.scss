@@ -1,0 +1,21 @@
+div {
+  height: 250px;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#custom-layer {
+  position: absolute;
+  width: 100%;
+}
+
+

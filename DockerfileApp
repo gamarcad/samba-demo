@@ -1,0 +1,31 @@
+# base image
+FROM debian:10
+
+# network config
+EXPOSE 4200
+
+WORKDIR /app
+
+RUN apt update
+RUN apt upgrade -y
+
+RUN apt install npm -y
+
+# install n to update all these fucking packages !!
+RUN npm install -g n
+RUN apt install curl -y
+RUN n latest
+RUN n 14
+COPY ./samba-app/ /app/
+RUN npm install -g @angular/cli@latest
+RUN npm install -g @angular-devkit/build-angular@latest
+RUN npm i  @types/node @types/webpack-dev-server @types/karma
+RUN npm install npm
+
+
+
+
+
+
+
+

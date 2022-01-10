@@ -1,0 +1,29 @@
+<div id="communications">
+  <div id="unsecure" class="plots">
+    <h3 class="title-center">Non-Secure</h3>
+    <div class="plot" *ngFor="let comm of communications" [class.reduce-opacity]="comm.hidden">
+      <app-single-communications-plot
+        *ngIf="!comm.hidden"
+        [secure]="false"
+        [execution]="execution"
+        [securityOption]="securityOptions"
+        [communication]="comm"
+        [focusedNode]="focusedNodeIndex"
+        ></app-single-communications-plot>
+    </div>
+  </div>
+  <div id="secure" class="plots">
+    <h3 class="title-center">Secure</h3>
+    <div class="plot" *ngFor="let comm of communications"  [class.reduce-opacity]="comm.hidden"  >
+      <app-single-communications-plot
+        *ngIf="!comm.hidden"
+        [secure]="true"
+        [execution]="execution"
+        [securityOption]="securityOptions"
+        [communication]="comm"
+        [focusedNode]="focusedNodeIndex"
+        ></app-single-communications-plot>
+    </div>
+  </div>
+</div>
+

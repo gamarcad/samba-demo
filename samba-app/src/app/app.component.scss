@@ -1,0 +1,356 @@
+@import 'colors.scss';
+
+// the app root must fit the available space
+app-root {
+  width: 100%;
+}
+
+// panel style
+#panels-container {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+
+  // put a small space between each panel
+  .panel:not(:last-child) {
+    margin-right: 0px;
+  }
+}
+
+
+// panels
+#left-panel {
+  background-color: #484545;
+  color: white;
+  width: 13%;
+}
+
+#center-panel {
+  padding: 0;
+  width: 100 - 13%;
+  background-color: #111111;
+  display: flex;
+  flex-direction: row;
+}
+
+$architecturePanelWidth: 30%;
+#architecture-panel {
+  width: $architecturePanelWidth;
+  position: relative;
+  border-right: 1px solid #aaa;
+
+  .architecture-container {
+    margin-bottom: 5px;
+    height: 25%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+  }
+
+  #code {
+    width: 100%;
+    height: 100 - 25%;
+    overflow-y: scroll;
+    .card {
+    }
+  }
+}
+
+#messages-stats-panels {
+  width: 100 - $architecturePanelWidth;
+  #stats-panel, #messages-panel {
+    padding: 0;
+  }
+
+  #stats-panel {
+    border-top: 1px solid #aaa;
+    position: relative;
+  }
+
+  #communications {
+    margin-bottom: 5px;
+  }
+
+  #history {
+    position: absolute;
+    bottom: 0;
+    left: 47.5%;
+    margin-top: 5px;
+  }
+
+  $buttonWidth: 75px;
+  $buttonHeight: 20px;
+  $buttonBorderColor: #aaa;
+  $buttonPadding: 5px;
+  #actions {
+    position: absolute;
+    top: -($buttonHeight + 2 * $buttonPadding) / 2;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+
+    button {
+      text-align: center;
+      width: $buttonWidth;
+      border-radius: 0;
+      border: none;
+      border-top: 1px solid $buttonBorderColor;
+      border-bottom: 1px solid $buttonBorderColor;
+      padding: $buttonPadding;
+    }
+
+    button:hover {
+      cursor: pointer;
+    }
+
+    button:first-child {
+      border-radius: 5px 0 0 5px;
+      border-left: 1px solid $buttonBorderColor;
+    }
+
+    button:last-child {
+      border-radius: 0 5px 5px 0;
+      border-right: 1px solid $buttonBorderColor;
+    }
+  }
+}
+
+.panel {
+  background-color: #fff;
+  padding: 10px;
+}
+
+
+// fields must have small spaces between and alignement in column
+.field {
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    width: 100%;
+  }
+}
+
+// security fields must fill space to put checkboxes to the right
+#security .field  {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  $checkboxBorder: 2px;
+  .cb {
+    display: block;
+    width: 10px;
+    height: 10px;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+
+    &.on {
+
+
+      &#paillier {
+        background-color: $paillierPrimary;
+        border: $checkboxBorder solid $paillierSecondary;
+      }
+
+      &#aes {
+        background-color: $aesPrimary;
+        border: $checkboxBorder solid $aesSecondary;
+      }
+      &#mask {
+        background-color: $maskPrimary;
+        border: $checkboxBorder solid $maskSecondary;
+      }
+
+      &#permutation {
+        background-color: $permutationPrimary;
+        border: $checkboxBorder solid $permutationSecondary;
+      }
+    }
+
+    &.off {
+      background-color: $checkboxOffPrimary;
+      border: $checkboxBorder solid $checkboxOffSecondary;
+    }
+  }
+
+
+}
+
+
+#code {
+  color: white;
+  .card:not(#message) {
+    margin-bottom: 4px;
+
+    .card-content {
+      background-color: white;
+      color: black;
+      padding: 2px;
+      border-radius: 5px;
+    }
+  }
+  p {
+    font-size: $codeSize;
+    padding: 0;
+    margin: 0;
+  }
+  .node-card, .node-card .highlight p  {
+    background: $node;
+    color: $nodeText;
+  }
+  .controller-card, .controller-card .highlight p{
+    background: $controller;
+    color: $controllerText;
+  }
+  .comp-card, .comp-card .highlight p {
+    background: $comp;
+    color: $compText;
+  }
+  .customer-card, .customer-card .highlight p {
+    background: $customer;
+    color: $customerText;
+  }
+}
+
+.card {
+  border-radius: 5px;
+  padding: 5px;
+  // the security requirements warning
+  &.warning-card {
+    background: $warningCard;
+  }
+
+  .card-title {
+    font-weight: bold;
+    font-size: $codeTitle;
+    margin-bottom: 5px;
+  }
+}
+
+#samba-configs .field {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  input {
+    width: 60%;
+  }
+}
+
+
+
+@mixin flex-center {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+// the message box
+#message {
+  background: #484545;
+  color: white;
+}
+
+#nodes {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 300px;
+
+  .node {
+    padding: 5px;
+    background-color: #4a4ae5;
+    color: white;
+    .reward {
+
+    }
+  }
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  flex-wrap: wrap;
+  button {
+    margin-bottom: 5px;
+  }
+}
+.action button {
+  display: block;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+  background-color: #4a4ae5;
+  border: 1px solid #4a4ae5;
+  color: white;
+  transition: .1s ease-in;
+
+  &:hover {
+    background-color: #fff;
+    color: #4a4ae5;
+    cursor: pointer;
+  }
+
+  &.disabled {
+    background: #484545;
+    color: white;
+    border-color: #fff;
+  }
+}
+
+
+// history layout
+body {
+  position: relative;
+  #history-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh ;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.36);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+    #history-popup {
+      width: 50%;
+      height: 70%;
+      background-color: #ffffff;
+      padding: 10px;
+      border-radius: 5px;
+
+
+    }
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+// highlight
+.highlightMode {
+  position: relative;
+  opacity: 0.3;
+}
+
+.highlightMode:hover {
+  opacity: 1;
+}
+

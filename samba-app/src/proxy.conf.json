@@ -1,0 +1,7 @@
+{
+  "/samba/*": {
+    "target": "http://localhost:4201/samba/",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

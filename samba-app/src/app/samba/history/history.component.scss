@@ -1,0 +1,41 @@
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+  height: 10%;
+  #close-button {
+    display: block;
+    height: 30px;
+  }
+}
+
+.popup-content {
+  height: 90%;
+  max-height: 90%;
+  overflow-y: scroll;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  tr.header {
+    color: white;
+    background-color: #4a4ae5;
+  }
+
+  th, td {
+    padding: 5px;
+  }
+
+  tr {
+    .odd {
+      background-color: rgba(42, 41, 41, 0.18);
+    }
+
+    .right {
+      text-align: right;
+    }
+  }
+}

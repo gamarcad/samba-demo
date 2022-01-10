@@ -1,0 +1,10 @@
+<div *ngIf="execution && execution.history">
+  Exact Probabilities:
+  <ul>
+    <li *ngFor="let prob of execution.history.probs; let index=index">
+      DO{{index}}: {{formatProb(execution.history.probs[index])}}
+    </li>
+  </ul>
+
+</div>
+<span>{{text}}</span>
