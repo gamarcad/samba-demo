@@ -2,6 +2,8 @@
 data/**
 !data/**.py
 !data/datasets/**/.gitkeep
+!data/**.sh
+!data/requirements.txt
 
 *.zip
 __pycache__

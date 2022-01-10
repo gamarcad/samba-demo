@@ -1,0 +1,4 @@
+phe
+cryptography
+pycryptodome
+textblob==0.15.3
