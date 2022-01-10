@@ -36,11 +36,11 @@ GOOGLE_DATASET_FOLDER="datasets/googlelocal"
 STEAM_DATASET_FOLDER="datasets/steam"
 if [ ! -e $GOOGLE_DATASET_FOLDER ]; then
     echo "[+] Creating Google dataset folder"
-    mkdir $GOOGLE_DATASET_FOLDER
+    mkdir -p $GOOGLE_DATASET_FOLDER
 fi
 if [ ! -e $STEAM_DATASET_FOLDER ]; then
     echo "[+] Creating Steam dataset folder"
-    mkdir $STEAM_DATASET_FOLDER
+    mkdir -p $STEAM_DATASET_FOLDER
 fi
 
 GOOGLE_DATASET_GZ="$GOOGLE_DATASET_FOLDER/googlelocal-reviews.gz"
@@ -92,7 +92,7 @@ if [ $computeProbs -eq 1 ]; then
 
     # creates the probs folder if missing
     if [ ! -e $PROBS_FOLDER ]; then
-        mkdir $PROBS_FOLDER
+        mkdir -p $PROBS_FOLDER
     fi
 
     echo $GOOGLE_DATASET_FILE
