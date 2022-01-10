@@ -106,4 +106,5 @@ if [ $computeProbs -eq 1 ]; then
 fi
 
 echo "[*] Generating data"
+mkdir -p data
 python3 pre-computations.py --steam-probs "$STEAM_PROBS" --google-probs "$GOOGLE_PROBS"
