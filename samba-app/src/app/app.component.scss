@@ -25,6 +25,11 @@ app-root {
   background-color: #484545;
   color: white;
   width: 13%;
+
+  a {
+    color: white;
+    font-weight: bold;
+  }
 }
 
 #center-panel {
@@ -65,11 +70,6 @@ $architecturePanelWidth: 30%;
   width: 100 - $architecturePanelWidth;
   #stats-panel, #messages-panel {
     padding: 0;
-  }
-
-  a {
-    color: white;
-    font-weight: bold;
   }
 
   #stats-panel {
