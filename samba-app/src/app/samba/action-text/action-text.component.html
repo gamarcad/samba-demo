@@ -1,10 +1,16 @@
 <div *ngIf="execution && execution.history">
-  Exact Probabilities:
-  <ul>
-    <li *ngFor="let prob of execution.history.probs; let index=index">
-      DO{{index}}: {{formatProb(execution.history.probs[index])}}
-    </li>
-  </ul>
-
+  <!-- Table containing the exact probs and their approximations for each arm-->
+  <table id="probs">
+    <tr>
+      <td></td>
+      <td>Exact</td>
+      <td>Approx</td>
+    </tr>
+    <tr *ngFor="let prob of execution.history.probs; let index=index">
+      <td>DO{{index}}</td>
+      <td>{{formatProb(execution.history.probs[index])}}</td>
+      <td>{{getApproximatedProbability(index)}}</td>
+    </tr>
+  </table>
 </div>
 <span>{{text}}</span>

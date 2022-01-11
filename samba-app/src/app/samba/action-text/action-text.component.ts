@@ -10,6 +10,7 @@ import {SambaChapter, SambaState} from "../state";
 export class ActionTextComponent implements OnInit, OnChanges {
 
   text : string;
+  approximatedProbability : number[] | undefined
   @Input() execution : Execution | undefined;
 
   constructor() { this.text = "" }
@@ -19,9 +20,34 @@ export class ActionTextComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // When a changes occur, the text must be updated as well as the
+    // approximated probabilities for each arm.
     this.updateText();
   }
 
+
+  /**
+   * Returns the aproximated probability of the given arm index.
+   * @param armIndex
+   */
+  getApproximatedProbability( armIndex : number ) : string {
+    // if the current execution is not defined, abort the computation
+    if ( !this.execution || !this.execution.currentTurn ) return "-"
+
+    // if the current chapter is not for the computation, skip it
+    if ( this.execution.chapter != SambaChapter.CORE_OF_PROTO ) return "-"
+
+    // compute the number of pulls and the number of rewards
+    let numberOfPulls = this.execution.currentTurn.nb_pulls[armIndex]
+    let numberOfRewars = this.execution.currentTurn.nb_rewards[armIndex]
+
+    return (numberOfRewars / numberOfPulls).toFixed(2)
+  }
+
+  /**
+   * Update the displayed text explaining the action done in the inteface.
+   * @private
+   */
   private updateText() {
     if ( this.execution == undefined ) {
       this.text = ""
@@ -30,6 +56,12 @@ export class ActionTextComponent implements OnInit, OnChanges {
     this.text = this.getMessage( this.execution.chapter, this.execution.state )
   }
 
+  /**
+   * Returns the "humanized" description of the current state.
+   * @param chapter
+   * @param state
+   * @private
+   */
   private getMessage( chapter : SambaChapter, state : SambaState ) : string {
     switch (chapter) {
       case SambaChapter.BEGIN: return ""
@@ -53,12 +85,6 @@ export class ActionTextComponent implements OnInit, OnChanges {
       }
     }
     throw new Error("Message not generated")
-  }
-
-  formatProbs(probs: number[]) {
-    return probs.map((value => {
-      return value.toFixed(2)
-    }))
   }
 
   formatProb(prob: number) {
