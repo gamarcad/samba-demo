@@ -1,7 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, Input} from '@angular/core';
 import {SambaApi} from "../../api/samba-api";
 import {ExecutionHistory} from "../executionHistory";
-import {exec} from "child_process";
 
 @Component({
   selector: 'app-history',
@@ -10,19 +9,20 @@ import {exec} from "child_process";
 })
 export class HistoryComponent implements OnInit {
 
-  histories : ExecutionHistory[];
+  @Input() histories : ExecutionHistory[];
   @Output() closeEvent = new EventEmitter<void>();
+  @Output() deleteHistoryCallback = new EventEmitter<ExecutionHistory>();
 
-  constructor( public api : SambaApi ) {
+
+  constructor() {
     this.histories = []
   }
 
   ngOnInit(): void {
-    this.api.getHistories().subscribe((data ) => {
-      this.histories = data
-      console.log(data)
-    })
+
   }
+
+
 
   getFormattedAlgorithName(algorithm: string) : string {
     if ( algorithm == 'epsilon-greedy' ) { return "Epsilon Greedy" }
@@ -50,10 +50,18 @@ export class HistoryComponent implements OnInit {
       history.time.security.paillier.decryption
 
     return secureTime.toFixed(2)
-
   }
+
 
   close() {
     this.closeEvent.emit();
+  }
+
+  /**
+   * Delete the history from the list of history
+   * @param history
+   */
+  deleteHistory(history : ExecutionHistory) {
+    this.deleteHistoryCallback.emit( history );
   }
 }

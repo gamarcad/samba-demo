@@ -125,7 +125,7 @@ export class ArchitecturePlotComponent implements OnInit, OnChanges {
     nodes.push({
       name: SambaEntity.COMP,
       value: SambaEntity.known( SambaEntity.COMP, true, this.securityOption ),
-      x: middle / 4,
+      x: middle / 8,
       y: -height,
       itemStyle:  {
         color: this.configs.colors.comp,

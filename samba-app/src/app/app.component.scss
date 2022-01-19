@@ -81,12 +81,7 @@ $architecturePanelWidth: 30%;
     margin-bottom: 5px;
   }
 
-  #history {
-    position: absolute;
-    bottom: 0;
-    left: 47.5%;
-    margin-top: 5px;
-  }
+
 
   $buttonWidth: 75px;
   $buttonHeight: 20px;
@@ -102,6 +97,9 @@ $architecturePanelWidth: 30%;
     align-content: center;
     align-items: center;
 
+    #history {
+      border-left: 1px solid gray;
+    }
 
     button {
       text-align: center;

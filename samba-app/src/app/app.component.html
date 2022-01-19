@@ -111,6 +111,7 @@
               <div class="action">
                 <button (click)="reset()" [class.disabled]="isPlaying">Reset</button>
                 <button (click)="moveToCumulativeRewardChapter()" [class.disabled]="isPlaying">End</button>
+                <button *ngIf="execution" (click)="listHistoryInHistoryDialog(execution.history)" [class.disabled]="isPlaying">Save</button>
               </div>
             </div>
 
@@ -125,7 +126,7 @@
 
         <!-- Message -->
         <div id="message" class="card">
-          <div class="card-title">Message</div>
+          <div class="card-title">Probabilities</div>
           <div class="card-content">
             <app-action-text [execution]="execution"></app-action-text>
           </div>
@@ -137,8 +138,7 @@
           <div class="card-content">
             <ul>
               <li>
-                Access to the <a href="https://github.com/gamarcad/samba-demo">git</a> to inspect the code.
-                Feel free to clone and modify it as you want.
+                Code available on <a href="https://github.com/gamarcad/samba-demo">github</a>.
               </li>
               <li>
                 <!-- TODO put the link to the paper -->
@@ -331,19 +331,6 @@
 
         <!-- Stats Panel -->
         <div id="stats-panel" class="panel" [class.highlightMode]="highlightStatus">
-          <app-execution-time-components-plot
-            [execution]="execution"
-            [securityOption]="securityOption"></app-execution-time-components-plot>
-
-          <app-execution-time-plot
-            [execution]="execution"
-            [securityOption]="securityOption"></app-execution-time-plot>
-
-
-          <!-- History Button -->
-          <div id="history">
-            <button (click)="showHistory()" [class.disabled]="isPlaying">History</button>
-          </div>
 
           <!-- Actions -->
           <div id="actions">
@@ -353,7 +340,19 @@
               <span *ngIf="isPlaying">Pause</span>
             </button>
             <button (click)="nextState()" [class.disabled]="isPlaying">Next</button>
+            <button id="history" (click)="showHistory()" [class.disabled]="isPlaying">History</button>
+            <button *ngIf="execution" (click)="listHistoryInHistoryDialog(execution.history)" [class.disabled]="isPlaying">Save</button>
           </div>
+
+          <app-execution-time-components-plot
+            [execution]="execution"
+            [securityOption]="securityOption"></app-execution-time-components-plot>
+
+          <app-execution-time-plot
+            [execution]="execution"
+            [securityOption]="securityOption"></app-execution-time-plot>
+
+
         </div>
 
 
@@ -365,7 +364,7 @@
   <!-- History -->
   <div id="history-container" *ngIf="showHistoryPopup" [class.hidden]="!showHistoryPopup">
     <div id="history-popup">
-      <app-history (closeEvent)="hideHistory()"></app-history>
+      <app-history (closeEvent)="hideHistory()" (deleteHistoryCallback)="deleteHistory($event)" [histories]="historiesToListInHistory"></app-history>
     </div>
   </div>
 </body>

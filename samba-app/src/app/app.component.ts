@@ -51,6 +51,7 @@ export class AppComponent implements OnInit, OnChanges  {
   ]
 
   BUDGETS_SET = [
+    10,
     50,
     100,
     200,
@@ -91,6 +92,7 @@ export class AppComponent implements OnInit, OnChanges  {
 
 
   history: ExecutionHistory | undefined;
+  historiesToListInHistory : ExecutionHistory[];
   securityOption : SecurityOption;
   paillier: boolean;
   mask : boolean;
@@ -109,6 +111,8 @@ export class AppComponent implements OnInit, OnChanges  {
     this.selectedBudget = this.BUDGETS_SET[0];
     this.selectedThreshold = this.TRESHOLD_SET[0]
     this.selectedK = this.NB_ARMS_SET[0]
+
+    this.historiesToListInHistory = []
 
     this.focusedNode = {nodeIndex: 0}
     this.execution = undefined;
@@ -365,6 +369,8 @@ export class AppComponent implements OnInit, OnChanges  {
 
           }
         }
+        // save the history
+        this.listHistoryInHistoryDialog(this.execution.history);
       }
     }
 
@@ -393,6 +399,10 @@ export class AppComponent implements OnInit, OnChanges  {
     this.execution = JSON.parse(JSON.stringify(this.execution))
   }
 
+  /**
+   * Updates information displayed in the node's data panel.
+   * @param execution
+   */
   updateNodeVariable( execution : Execution ) {
     // define variables that we will used to update node var
     let rewards = []
@@ -458,6 +468,40 @@ export class AppComponent implements OnInit, OnChanges  {
       node.pulls = pulls[nodeIndex]
       nodeIndex++
     }
+
+  }
+
+  /**
+   * Adjust the position of each node's data panel in the architecture
+   */
+  adjustNodesPosition() {
+    // place each node at the right place
+    let HTMLNodes = document.getElementById("nodes")
+    if ( HTMLNodes == null || this.execution == null) return
+    let initialMarginLeft = 19;
+    let availableWidth = 85;
+    let current = initialMarginLeft
+    for ( let index = 0; index < HTMLNodes.childNodes.length; index++ ) {
+        let node : any = HTMLNodes.childNodes.item(index)
+        node.setAttribute( "style", "position: absolute; left:" + current +"%;" )
+      current = current + (availableWidth - initialMarginLeft) / this.execution.history.nb_arms
+    }
+    console.error("NODES",HTMLNodes)
+  }
+
+  /**
+   * List the given history in the History dialog.
+   */
+  listHistoryInHistoryDialog( history : ExecutionHistory ) {
+    // if the history already exists, ignore it
+    for ( let item of this.historiesToListInHistory ) {
+      if ( JSON.stringify(history) == JSON.stringify(item) ) {
+        return
+      }
+    }
+
+    // add it in the execution
+    this.historiesToListInHistory.push(history);
   }
 
   /**
@@ -510,7 +554,6 @@ export class AppComponent implements OnInit, OnChanges  {
 
   hideHistory() {
     this.showHistoryPopup = false;
-    console.log("Popup must be hidden now", this.showHistoryPopup)
   }
 
   existsInArray( arr : any[], item : any ) : boolean {
@@ -538,6 +581,12 @@ export class AppComponent implements OnInit, OnChanges  {
       this.permutation = !this.permutation
     }
     this.onSecurityOptionsChanged()
+  }
+
+  deleteHistory( history : ExecutionHistory ) {
+    this.historiesToListInHistory = this.historiesToListInHistory.filter( function (item : ExecutionHistory) {
+      return JSON.stringify(history) != JSON.stringify(item)
+    } )
   }
 
   highlightStatus : boolean = false;

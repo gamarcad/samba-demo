@@ -29,6 +29,10 @@ table {
     padding: 5px;
   }
 
+  tr:nth-child(even) {
+    background-color: rgba(217, 209, 209, 0.46);
+  }
+
   tr {
     .odd {
       background-color: rgba(42, 41, 41, 0.18);
@@ -38,4 +42,23 @@ table {
       text-align: right;
     }
   }
+}
+.remove-cell {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.remove {
+  border: 1px solid rgb(255, 0, 0);
+  color: red;
+  background: white;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.remove:hover {
+  cursor: pointer;
+  background-color: rgb(255, 0, 0);
+  color: white;
 }
