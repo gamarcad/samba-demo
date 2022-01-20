@@ -211,10 +211,6 @@ export class ExecutionTimeComponentsPlotComponent implements OnInit, OnChanges {
     }
   }
 
-  private estimate_executon_time( time : number, target_iteration : number, history : ExecutionHistory ) : number {
-    return target_iteration * time / history.execution_time.budget
-  }
-
   private round( value : number, decimals : number = 3 ) : string
   {
     return (Math.round(value * 10**decimals) / 10**decimals).toFixed(decimals);

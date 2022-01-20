@@ -162,7 +162,7 @@
           <app-architecture-plot [execution]="execution" [securityOption]="securityOption" [onNodeClick]="updateFocusedNode"></app-architecture-plot>
 
           <!-- Network Data -->
-          <div class="data" *ngIf="execution">
+          <div class="data" *ngIf="execution && execution.chapter != SambaChapter.BEGIN">
             <div id="nodes">
               <div class="node" *ngFor="let node of execution.nodes">
                 <span class="reward">{{node.reward}}</span>

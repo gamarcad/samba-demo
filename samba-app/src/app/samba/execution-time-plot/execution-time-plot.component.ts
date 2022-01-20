@@ -140,7 +140,6 @@ export class ExecutionTimePlotComponent implements OnInit, OnChanges {
 
       secureData.push(secureTime)
     }
-    console.log("[TIme] xData", xData)
 
     // recompute the execution time with all security enabled in order to compute the maximum time
     let budget = history.budget;

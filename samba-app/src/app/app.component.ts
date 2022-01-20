@@ -279,6 +279,7 @@ export class AppComponent implements OnInit, OnChanges  {
 
     this.updateNodeVariable(this.execution)
 
+
     this.execution = JSON.parse(JSON.stringify(this.execution))
   }
 
@@ -468,7 +469,6 @@ export class AppComponent implements OnInit, OnChanges  {
       node.pulls = pulls[nodeIndex]
       nodeIndex++
     }
-
   }
 
   /**
@@ -478,15 +478,21 @@ export class AppComponent implements OnInit, OnChanges  {
     // place each node at the right place
     let HTMLNodes = document.getElementById("nodes")
     if ( HTMLNodes == null || this.execution == null) return
-    let initialMarginLeft = 19;
-    let availableWidth = 85;
-    let current = initialMarginLeft
+    let initialMarginLeft = 22;
+
+    let offset = 10;
+    switch (this.execution.history.nb_arms) {
+      case 3: offset = 24; break;
+      case 4: offset = 16; break;
+      case 5: offset = 11.75; break;
+      default: throw new Error("Invalid number of arms")
+    }
+
     for ( let index = 0; index < HTMLNodes.childNodes.length; index++ ) {
         let node : any = HTMLNodes.childNodes.item(index)
-        node.setAttribute( "style", "position: absolute; left:" + current +"%;" )
-      current = current + (availableWidth - initialMarginLeft) / this.execution.history.nb_arms
+        let position = initialMarginLeft + index * (offset);
+        node.setAttribute( "style", "position: absolute; left:" + position +"%;" )
     }
-    console.error("NODES",HTMLNodes)
   }
 
   /**
