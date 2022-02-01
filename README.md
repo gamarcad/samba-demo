@@ -1,4 +1,20 @@
-# Samba
+# SAMBA: a system for Secure federAted Multi-armed BAndits
+
+Gael Marcadet, Radu Ciucanu, Pascal Lafourcade, Marta Soare, Sihem Amer-Yahia
+
+[Demo paper accepted to ICDE 2022](https://icde2022.ieeecomputer.my/demo-accepted-papers/)
+
+
+If you use our code, please cite
+```
+@inproceedings{MCLSA22,
+  author    = {Marcadet, G. and Ciucanu, R. and Lafourcade, P. and Soare, M. and {Amer-Yahia}, S.},
+  title     = {{SAMBA: A System for Secure Federated Multi-Armed Bandits}},
+  booktitle = {IEEE International Conference on Data Engineering (ICDE) -- Demo},
+  year      = {2022}
+}
+
+```
 
 ## Quick Install
 To launch the demo, run the following command in your terminal in the root of the project:
