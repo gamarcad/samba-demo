@@ -2,7 +2,7 @@
 
 Gael Marcadet, Radu Ciucanu, Pascal Lafourcade, Marta Soare, Sihem Amer-Yahia
 
-[Demo paper accepted to ICDE 2022](https://icde2022.ieeecomputer.my/demo-accepted-papers/)
+[Demo paper published at ICDE 2022](https://doi.org/10.1109/ICDE53745.2022.00286)
 
 
 If you use our code, please cite
@@ -11,6 +11,7 @@ If you use our code, please cite
   author    = {Marcadet, G. and Ciucanu, R. and Lafourcade, P. and Soare, M. and {Amer-Yahia}, S.},
   title     = {{SAMBA: A System for Secure Federated Multi-Armed Bandits}},
   booktitle = {IEEE International Conference on Data Engineering (ICDE) -- Demo},
+  pages     = {3154--3157},
   year      = {2022}
 }
 
